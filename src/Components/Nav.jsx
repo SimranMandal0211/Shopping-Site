@@ -6,8 +6,9 @@ export default function Nav() {
     <>
       {/* Header */}
       <div className="bg-gray-200 px-4 py-2 flex justify-end gap-6">
-        <button className="text-gray-700 hover:text-blue-500 font-medium text-sm transition">Sign In</button>
-        <button className="text-gray-700 hover:text-blue-500 font-medium text-sm transition">Register</button>
+        <NavLink className="text-gray-700 hover:text-blue-500 font-medium text-sm transition"
+        to="/signin">Sign In</NavLink>
+        <NavLink className="text-gray-700 hover:text-blue-500 font-medium text-sm transition" to="/login">Register</NavLink>
       </div>
 
       {/* Main Navbar */}
