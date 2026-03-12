@@ -4,7 +4,7 @@ import Home from "./Pages/Home";
 import Products from "./Pages/Products";
 
 import Login from "./Pages/Login";
-import SignIn from "./Pages/SignIn";
+import SignUp from "./Pages/SignUp";
 
 export default function App() {
   return (
@@ -16,7 +16,7 @@ export default function App() {
           <Route path="/products" element={<Products />} />
 
           <Route path="/login" element={<Login />} />
-          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
           
         </Routes>
       </main>
