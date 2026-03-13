@@ -1,5 +1,6 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import src from '../assets/images/logo.png';
+import {MdShoppingCart} from "react-icons/md";
 
 export default function Nav() {
   return (
@@ -23,7 +24,13 @@ export default function Nav() {
         </div>
 
         {/* Cart Button */}
-        <button className="bg-blue-500 text-white px-6 py-2 rounded font-medium hover:bg-blue-600 transition duration-200 shadow-sm ml-auto">Cart</button>
+        <Link to="/cart">
+          <button className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-medium px-4 py-2 rounded transition duration-200 shadow-sm ml-auto flex items-center gap-2">
+            <MdShoppingCart className="text-xl" />
+            <span>Cart</span>
+          </button>
+        </Link>
+        
       </nav>
     </>
   );
