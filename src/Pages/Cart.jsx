@@ -1,4 +1,4 @@
-import src from "../assets/images/productImg/fruit-n-veg/apple.jpg";
+import src from "/images/productImg/fruit-n-veg/apple.jpg";
 import lowestPrice from "../assets/images/lowest-price.png";
 
 
