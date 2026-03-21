@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {toast} from "react-toastify";
 
 
 const SignUp = () => {
@@ -42,7 +43,8 @@ const SignUp = () => {
     existingUsers.push(userData);
     localStorage.setItem("users", JSON.stringify(existingUsers));
 
-        alert("Register Successfull");
+        // alert("Register Successfull");
+        toast.success("Login successful");
         navigate("/login");
     };
 
@@ -50,7 +52,7 @@ const SignUp = () => {
 
     return(
         <div className="min-h-[calc(100vh-120px)] flex flex-col justify-center items-center bg-gray-100 px-4">
-            <div className="bg-white shadow-md p-8 w-full rounded max-w-[700px] h-auto sm:h-[450px] flex flex-col sm:flex-row ">
+            <div className="bg-white shadow-md p-8 w-full rounded max-w-175 h-auto sm:h-112.5 flex flex-col sm:flex-row ">
 {/* left */}
                 <div className="w-full sm:w-1/2 flex flex-col justify-center pr-4 pl-4 sm:pr-8 sm:pl-4">
                     <h1 className="text-3xl font-bold mb-2 ">Sign Up</h1>

@@ -1,64 +1,30 @@
 import { NavLink, Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+
+import { AuthContext } from '../context/AuthContext';
+import { CartContext } from '../context/CartContext';
+
 import src from '../assets/images/logo.png';
 import {MdShoppingCart} from "react-icons/md";
+import { toast } from 'react-toastify';
 
 export default function Nav() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [cartCount, setCartCount] = useState(0);
+  
+  // Get from Context 
+  const { user, logout } = useContext(AuthContext);
 
-  useEffect(() => {
-    const loggedUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const { cartItems } = useContext(CartContext);
 
-    if(loggedUser){
-      setUser(loggedUser);
-    }
-  }, []);
-
-
-  useEffect(() => {
-    // const user = JSON.parse(localStorage.getItem("loggedInUser"));
-
-    // if(user){
-    //   const cartKey = `cart_${user.email}`;
-    //   const cartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
-
-    //   const totalQty = cartItems.reduce(
-    //     (acc, item) => acc + (item.qty || 1),0
-    //   );
-
-    //   setCartCount(totalQty);
-    // }
-
-    const updateCartCount = () => {
-
-      const user = JSON.parse(localStorage.getItem("loggedInUser"));
-      if(user){
-        const cartKey = `cart_${user.email}`;
-        const cartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
-        const totalQty = cartItems.reduce((acc, item) => acc + (item.qty || 1), 0);
-
-        setCartCount(totalQty);
-      }else{
-        setCartCount(0);
-      }
-    };
-
-    // run once when navbar loads
-    updateCartCount();
-
-    window.addEventListener("cartUpdated", updateCartCount);
-
-    return () => {
-      window.removeEventListener("cartUpdated", updateCartCount);
-    }
-  }, []);
+  const cartCount = cartItems.reduce(
+    (acc, item) => acc + (item.qty || 1), 0
+  );
 
 
+// logout
   const handleLogout = () => {
-    localStorage.removeItem("loggedInUser");
-    setUser(null);
+    logout(); //from context
+    toast.success("Logout Successfully");
     navigate("/login");
   };
 

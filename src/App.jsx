@@ -1,5 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import {useState, useEffect} from "react";
+import {useContext, UseContext} from "react";
+import { ToastContainer } from "react-toastify";  
+import "react-toastify/dist/ReactToastify.css";
+
 
 import Nav from "./Components/Nav";
 import Home from "./Pages/Home";
@@ -9,20 +12,11 @@ import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import Cart from "./Pages/Cart";
 
+import { AuthContext } from "./context/AuthContext";
+
 export default function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
 
-  
-  useEffect(() => {
-    const user = localStorage.getItem('loggedInUser');
-
-    if(user){
-      setLoggedIn(true);
-    }else{
-      setLoggedIn(false);
-    }
-  }, []);
-
+const { user } = useContext(AuthContext);
 
   return (
     <>
@@ -35,9 +29,14 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
 
-          <Route path="/cart" element={loggedIn ? <Cart /> : <Login />} />
+          <Route path="/cart" element={user ? <Cart /> : <Login />} />
         </Routes>
       </main>
+
+      <ToastContainer 
+        position="top-right"
+        autoClose= {3000}
+      />
     </>
   )
 }

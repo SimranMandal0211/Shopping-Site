@@ -1,11 +1,17 @@
-import {useState} from "react";
+import {useState, useContext} from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const navigate = useNavigate();
+
+    // get from context
+    const { login } = useContext(AuthContext);
 
     const handleSubmit = (e) => {
         e.preventDefault(); 
@@ -22,13 +28,14 @@ const Login = () => {
                 email:validUser.email
             };
             
-            localStorage.setItem("loggedInUser", JSON.stringify(loggedUser));
+            login(loggedUser);  //context used
 
-            alert("Login Succesfull");
+            // alert("Login Succesfull");
+            toast.success("Login Successful!");
             
             navigate("/");
         }else{
-            alert("Invalid email or password");
+            toast.error("Invalid email or password")
         }
     }
 
@@ -36,7 +43,7 @@ const Login = () => {
     return(
        <div className = "min-h-[calc(100vh-120px)] flex flex-col justify-center items-center bg-gray-100 px-4">
 
-        <div className="bg-white shadow-md rounded w-full max-w-[700px] sm:h-[450px] p-8 flex flex-col sm:flex-row">
+        <div className="bg-white shadow-md rounded w-full max-w-175 sm:h-112.5 p-8 flex flex-col sm:flex-row">
 {/* left  */}
             <div className="w-full sm:w-1/2 flex flex-col justify-center pr-0 sm:pr- pl-0 sm:pl-4 py-6 sm:py-0">
                 <h1 className="text-3xl font-bold mb-2 text-center sm:text-left">Login</h1>

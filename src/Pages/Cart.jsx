@@ -1,70 +1,13 @@
-import src from "/images/productImg/fruit-n-veg/apple.jpg";
 import lowestPrice from "../assets/images/lowest-price.png";
-import { IoTerminalSharp } from "react-icons/io5";
-import { useState, useEffect } from "react";
+import { useContext } from "react";
+import { toast } from "react-toastify";
 
+import { CartContext } from "../context/CartContext";
 import EmptyCart from "../Components/EmptyCart";
 
 export default function Cart(){
-    const [cartItems, setCartItems] = useState([]);
+    const {cartItems, increaseQty, decreaseQty, removeItem } = useContext(CartContext);
 
-    // load cart from browser storage
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("loggedInUser"));
-
-        if(user){
-            const cartKey = `cart_${user.email}`;
-            const storedCart = JSON.parse(localStorage.getItem(cartKey)) || [];
-            setCartItems(storedCart);
-        }
-    }, []);
-
-    // Increase quantity
-    const increaseQty = (index) => {
-        const updated = [...cartItems];
-        updated[index].qty = (updated[index].qty || 1) + 1;
-        
-        setCartItems(updated);
-
-        const user = JSON.parse(localStorage.getItem("loggedInUser"));
-        const cartKey = `cart_${user.email}`;
-       
-        localStorage.setItem(cartKey, JSON.stringify(updated));
-        window.dispatchEvent(new Event("cartUpdated"));
-    }
-
-    // Decrease quantity
-    const decreaseQty = (index) => {
-        const updated = [...cartItems];
-        if((updated[index].qty || 1) > 1){
-            updated[index].qty -= 1;
-        }else{
-            // qty is 1 remove the item
-            updated.splice(index, 1);
-        }
-
-        setCartItems(updated);
-
-        const uer = JSON.parse(localStorage.getItem("loggedInUser"));
-        const cartKey = `cart_${uer.email}`;
-
-        localStorage.setItem(cartKey, JSON.stringify(updated));
-        window.dispatchEvent(new Event("cartUpdated"));
-    };
-
-    // Remove item from cart
-    const removeItem = (index) => {
-        const updated = [...cartItems];
-        updated.splice(index, 1);
-        setCartItems(updated);
-
-        const uer = JSON.parse(localStorage.getItem("loggedInUser"));
-        const cartKey = `cart_${uer.email}`;
-
-        localStorage.setItem(cartKey, JSON.stringify(updated));
-        window.dispatchEvent(new Event("cartUpdated"));
-    }    
-    
     // Total price
     const total = cartItems.reduce(
         (acc, item) => acc + item.price * (item.qty || 1), 0
@@ -87,50 +30,55 @@ export default function Cart(){
                 </div>
 
     {/* section 2 - Cart Product List */}
-                {cartItems.length === 0 ? (
-                    <p className="p-4 text-gray-500">Your cart is empty</p>
-                ) : (
-                    cartItems.map((item, index) => (
-                        <div className="flex justify-between items-center p-4"
-                        key={item.id}>
-                            <div className="flex items-center gap-4 flex-nowrap">
-                                <img src={item.imageURL} alt={item.name} 
-                                    className="w-16 h-16 md:w-20 md:h-20 rounded  object-cover"    
-                                />
+                {cartItems.map((item, index) => (
+                    <div className="flex justify-between items-center p-4"
+                    key={item.id}>
+                        <div className="flex items-center gap-4 flex-nowrap">
+                            <img src={item.imageURL} alt={item.name} 
+                                className="w-16 h-16 md:w-20 md:h-20 rounded  object-cover"    
+                            />
 
-                                <div className="flex-1 min-w-0">
-                                    <p className="font-bold text-gray-800 tetx-sm md:text-base truncate">{item.name}</p>
+                            <div className="flex-1 min-w-0">
+                                <p className="font-bold text-gray-800 tetx-sm md:text-base truncate">{item.name}</p>
 
-                                    <div className="flex items-center gap-2 md:gap-4 mt-2">
-                                        <button className="bg-pink-500 hover:bg-pink-600 text-white px-2 md:px-3 py-1 rounded cursor-pointer text-lg md:text-xl"
-                                        onClick = {() => decreaseQty(index)}
-                                        >
-                                            -
-                                        </button>
-                                        <span className="text-base md:text-lg font-bold">{item.qty || 1}</span>
+                                <div className="flex items-center gap-2 md:gap-4 mt-2">
+                                    <button className="bg-pink-500 hover:bg-pink-600 text-white px-2 md:px-3 py-1 rounded cursor-pointer text-lg md:text-xl"
+                                    onClick = {() => {
+                                        decreaseQty(index);
+                                        toast.info("Quantity decrease");
+                                    }}
+                                    >
+                                        -
+                                    </button>
+                                    <span className="text-base md:text-lg font-bold">{item.qty || 1}</span>
 
 
-                                        <button className="bg-pink-500 hover:bg-pink-600 text-white px-2 md:px-3 py-1 rounded cursor-pointer text-lg md:text-xl"
-                                        onClick = {() => increaseQty(index)}
-                                        >
-                                            +
-                                        </button>
-                                        <span className="text-gray-500 cursor-pointer"
-                                        onClick={() => removeItem(index)}>
-                                            X
-                                        </span>
-                                        <span className="text-gray-800 font-semibold text-sm md:text-base">
-                                            Rs. {item.price}
-                                        </span>
-                                    </div>    
-                                </div>
+                                    <button className="bg-pink-500 hover:bg-pink-600 text-white px-2 md:px-3 py-1 rounded cursor-pointer text-lg md:text-xl"
+                                    onClick = {() => {
+                                        increaseQty(index);
+                                        toast.info("Quantity increased");
+                                    }}
+                                    >
+                                        +
+                                    </button>
+                                    <span className="text-gray-500 cursor-pointer"
+                                    onClick={() => {
+                                        removeItem(index);
+                                        toast.error(`${item.name} removed from cart`);
+                                    }}>
+                                        X
+                                    </span>
+                                    <span className="text-gray-800 font-semibold text-sm md:text-base">
+                                        Rs. {item.price}
+                                    </span>
+                                </div>    
                             </div>
-                            <p className="font-bold text-sm md:text-lg ml-2">
-                                Rs. {(item.qty || 1) * item.price}
-                            </p>
                         </div>
-                    ))
-                )}
+                        <p className="font-bold text-sm md:text-lg ml-2">
+                            Rs. {(item.qty || 1) * item.price}
+                        </p>
+                    </div>
+                ))}
 
     {/* section 3  */}
                 <div className="p-4 flex items-center justify-center border-t-10 border-gray-100 ">
@@ -149,5 +97,5 @@ export default function Cart(){
                 </button>
             </div>
         </div>
-    )
+    );
 }
