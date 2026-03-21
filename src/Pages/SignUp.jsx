@@ -1,6 +1,55 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+
 const SignUp = () => {
+    const navigate = useNavigate();
+
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
+    const [error, setErrors] = useState({});
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const newErrors = {};
+
+        if(!firstName) newErrors.firstName = "Fill this field";
+        if(!lastName) newErrors.lastName = "Fill this field";
+        if(!email) newErrors.email = "Fill this field";
+        if(!password) newErrors.password = "Fill this field";
+        if(!confirmPassword) newErrors.confirmPassword = "Fill this field";
+
+        if(password && confirmPassword &&password !== confirmPassword){
+            newErrors.confirmPassword = "Password and Confirm Password should be same";
+        }
+
+        setErrors(newErrors);
+        if(Object.keys(newErrors).length > 0) return;
+
+        const userData = {
+            firstName,
+            lastName,
+            email,
+            password
+        };
+        
+        // store users in browser storage
+    const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
+    existingUsers.push(userData);
+    localStorage.setItem("users", JSON.stringify(existingUsers));
+
+        alert("Register Successfull");
+        navigate("/login");
+    };
+
+
+
     return(
-        <div className="h-screen flex flex-col justify-center items-center bg-gray-100 px-4">
+        <div className="min-h-[calc(100vh-120px)] flex flex-col justify-center items-center bg-gray-100 px-4">
             <div className="bg-white shadow-md p-8 w-full rounded max-w-[700px] h-auto sm:h-[450px] flex flex-col sm:flex-row ">
 {/* left */}
                 <div className="w-full sm:w-1/2 flex flex-col justify-center pr-4 pl-4 sm:pr-8 sm:pl-4">
@@ -9,12 +58,19 @@ const SignUp = () => {
                 </div>
 
 {/* right */}
-                <form className="w-full sm:w-1/2 flex flex-col gap-4 sm:gap-6 pl-4 pr-4 sm:pl-8 sm:pr-4 py-4">
+                <form 
+                 onSubmit={handleSubmit}
+                 className="w-full sm:w-1/2 flex flex-col gap-4 sm:gap-6 pl-4 pr-4 sm:pl-8 sm:pr-4 py-4">
                     <div className="relative ">
                         <input type="text"      
                             placeholder="First Name"
-                            className="peer w-full border-b border-gray-400 py-2 outline-none focus:border-blue-500"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            className={`peer w-full border-b py-2 outline-none ${error.firstName ? 'border-red-500' : 'border-gray-400 focus:border-blue-500'}`}
                         />
+                        {error.firstName && (
+                            <p className="text-red-500 text-xs mt-1">{error.firstName}</p>
+                        )}
                         <label className="absolute left-0 -top-4 text-sm text-gray-400 opacity-0 peer-focus:opacity-100 peer-focus:text-blue-500 transition">
                             First Name
                         </label>
@@ -23,18 +79,27 @@ const SignUp = () => {
                     <div className="relative">
                         <input type="text" 
                             placeholder="Last Name"
-                            className="peer w-full border-b border-gray-400 py-2 outline-none focus:border-blue-500"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                            className={`peer w-full border-b py-2 outline-none ${error.lastName ? 'border-red-500' : 'border-gray-400 focus:border-blue-500'}`}
                         />
+                        {error.lastName && (
+                            <p className="text-red-500 text-xs mt-1">{error.lastName}</p>
+                        )}
                         <label className="absolute left-0 -top-4 text-sm text-gray-400 opacity-0 peer-focus:opacity-100 peer-focus:text-blue-500 transition">
                             Last Name
                         </label>
                     </div>
-
                     <div className="relative w-full">
                         <input type="email"     
                             placeholder="Email"
-                            className="peer w-full border-b border-gray-400 py-2 outline-none focus:border-blue-500"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className={`peer w-full border-b py-2 outline-none ${error.email ? 'border-red-500' : 'border-gray-400 focus:border-blue-500'}`}
                         />
+                        {error.email && (
+                            <p className="text-red-500 text-xs mt-1">{error.email}</p>
+                        )}
                         <label className="absolute left-0 -top-4 text-sm text-gray-400 opacity-0 peer-focus:opacity-100 peer-focus:text-blue-500 transition">
                             Email
                         </label>
@@ -43,8 +108,13 @@ const SignUp = () => {
                     <div className="relative w-full">
                         <input type="password"     
                             placeholder="Password"
-                            className="peer w-full border-b border-gray-400 py-2 outline-none focus:border-blue-500"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className={`peer w-full border-b py-2 outline-none ${error.password ? 'border-red-500' : 'border-gray-400 focus:border-blue-500'}`}
                         />
+                        {error.password && (
+                            <p className="text-red-500 text-xs mt-1">{error.password}</p>
+                        )}
                         <label className="absolute left-0 -top-4 text-sm text-gray-400 opacity-0 peer-focus:opacity-100 peer-focus:text-blue-500 transition">
                             Password
                         </label>
@@ -53,8 +123,13 @@ const SignUp = () => {
                     <div className="relative w-full">
                         <input type="password"     
                             placeholder="Confirm Password"
-                            className="peer w-full border-b border-gray-400 py-2 outline-none focus:border-blue-500"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className={`peer w-full border-b py-2 outline-none ${error.confirmPassword ? 'border-red-500' : 'border-gray-400 focus:border-blue-500'}`}
                         />
+                        {error.confirmPassword && (
+                            <p className="text-red-500 text-xs mt-1">{error.confirmPassword}</p>
+                        )}
                         <label className="absolute left-0 -top-4 text-sm text-gray-400 opacity-0 peer-focus:opacity-100 peer-focus:text-blue-500 transition">
                             Confirm Password
                         </label>

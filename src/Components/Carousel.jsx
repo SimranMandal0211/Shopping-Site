@@ -21,8 +21,8 @@ const Carousel = () => {
     }
 
     return (
-       <div className="relative w-full h-64 md:h-96 bg-linear-to-r from-blue-500 to-pink-500 rounded-lg overflow-hidden shadow-lg mb-8">
-            <img src={images[index]} alt="Special Offer" className="w-full h-full object-cover hover:scale-105 transition duration-300" />
+       <div className="relative w-full bg-linear-to-r from-blue-500 to-pink-500 rounded-lg overflow-hidden shadow-lg mb-8">
+            <img src={images[index]} alt="Special Offer" className="w-full h-auto object-contain" />
 
             <span className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 hover:bg-opacity-100 text-gray-800 text-2xl font-bold px-3 py-2 rounded-full cursor-pointer hover:bg-gray-100 transition"
             onClick={prevSlide}>

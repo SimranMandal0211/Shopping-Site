@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { categoryDate } from '../assets/categoryData';
 
 const Category = () => {
@@ -10,11 +11,14 @@ const Category = () => {
                             <div className="shrink-0 w-full md:w-auto flex justify-center md:justify-start">
                                 <img src={card.imageUrl} alt={card.name} className="h-40 w-auto rounded-lg shadow-md hover:shadow-lg transition duration-300" />
                             </div>
-                            <div className="flex-1">
+                            <div className="flex flex-col items-center flex-1">
                                 <h2 className="text-4xl font-bold text-gray-800 mb-4 text-center md:text-left">{card.name}</h2>
                                 <p className="text-gray-600 text-lg mb-6 text-center md:text-left">{card.description}</p>
                                 <div className="flex justify-center md:justify-start">
-                                    <button className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-lg font-semibold cursor-pointer transition duration-200 shadow-md hover:shadow-lg hover:scale-105">{card.key}</button>
+                                    <Link to={`/products?category=${card.id}`}>
+                                        <button className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-lg font-semibold cursor-pointer transition duration-200 shadow-md hover:shadow-lg hover:scale-105">{card.key}
+                                        </button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
